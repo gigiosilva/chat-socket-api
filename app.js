@@ -20,9 +20,8 @@ io.on("connection", function (client) {
     });
   
     client.on("send", function(msg){
-      console.log("Message: " + msg);
-      console.log(clients[client.id]);
-      client.broadcast.emit("chat", {name: clients[client.id], msg: msg});
+
+      client.broadcast.emit("chat", JSON.stringify({name: clients[client.id], msg: msg}));
     });
   
     client.on("disconnect", function(){
