@@ -12,21 +12,22 @@ app.get('/', function(req, res){
 });
 
 io.on("connection", function (client) {
+
     client.on("join", function(name){
       console.log("Joined: " + name);
       clients[client.id] = name;
-      client.emit("update", "You have connected to the server.");
-      client.broadcast.emit("update", name + " has joined the server.")
+      client.emit("update", JSON.stringify({msg: "You are connected to the server", server: true}));
+      client.broadcast.emit("update", JSON.stringify({msg: `${name} has joined the server`, server: true}));
     });
   
     client.on("send", function(msg){
 
-      client.broadcast.emit("chat", JSON.stringify({name: clients[client.id], msg: msg}));
+      client.broadcast.emit("chat", JSON.stringify({name: clients[client.id], msg: msg, external: true}));
     });
   
     client.on("disconnect", function(){
-      console.log("Disconnect");
-      io.emit("update", clients[client.id] + " has left the server.");
+      console.log("Disconnected: " + clients[client.id]);
+      io.emit("update", JSON.stringify({msg: `${clients[client.id]} has left the server`, server: true}));
     });
 });
 
