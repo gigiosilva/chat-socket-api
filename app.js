@@ -16,7 +16,7 @@ io.on("connection", function (client) {
     client.on("join", function(name){
       console.log("Joined: " + name);
       clients[client.id] = name;
-      client.emit("update", JSON.stringify({msg: "You are connected to the server", server: true}));
+      client.emit("update", JSON.stringify({msg: `You are connected to the server as ${name}`, server: true}));
       client.broadcast.emit("update", JSON.stringify({msg: `${name} has joined the server`, server: true}));
     });
   
